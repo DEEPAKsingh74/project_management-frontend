@@ -18,7 +18,6 @@ const Sidebar = () => {
 
 	const dispatch = useAppDispatch();
 	const isSidebarCollapsed = useAppSelector(state => state.global.isSidebarCollapsed);
-	const isDarkMode = useAppSelector(state => state.global.isDarkMode);
 
 	const sidebarClassNames = `flex flex-col fixed h-[100%] justify-between shadow-xl transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white ${
 		isSidebarCollapsed ? "w-0 hidden" : "w-64"
@@ -118,7 +117,7 @@ const Sidebar = () => {
 
 				{
 					showProjects && (
-						projects?.map((project, index) => <SideBarLinks key={project.id} icon={Briefcase} label={project.name} href={`/projects/${project.id}`}/>)
+						projects?.map((project) => <SideBarLinks key={project.id} icon={Briefcase} label={project.name} href={`/projects/${project.id}`}/>)
 					)
 				}
 
@@ -167,7 +166,6 @@ const SideBarLinks = ({
 	href,
 	icon: Icon,
 	label, 
-	isCollapsed,
 }: sideBarLinkProps) => {
 
 	const pathName = usePathname();

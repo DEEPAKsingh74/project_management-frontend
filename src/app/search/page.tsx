@@ -6,7 +6,7 @@ import TaskCard from "../(components)/TaskCard";
 import UserCard from "../(components)/UserCard";
 import ProjectCard from "../(components)/ProjectCard";
 import { debounce } from "lodash"
-import { useSearchQuery } from "@/state/api";
+import { Project, Task, User, useSearchQuery } from "@/state/api";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,21 +48,21 @@ const Search = () => {
             {searchResults.tasks && searchResults.tasks?.length > 0 && (
               <h2>Tasks</h2>
             )}
-            {searchResults.tasks?.map((task: any) => (
+            {searchResults.tasks?.map((task: Task) => (
               <TaskCard key={task.id} task={task} />
             ))}
 
             {searchResults.projects && searchResults.projects?.length > 0 && (
               <h2>Projects</h2>
             )}
-            {searchResults.projects?.map((project: any) => (
+            {searchResults.projects?.map((project: Project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
 
             {searchResults.users && searchResults.users?.length > 0 && (
               <h2>Users</h2>
             )}
-            {searchResults.users?.map((user: any) => (
+            {searchResults.users?.map((user: User) => (
               <UserCard key={user.userId} user={user} />
             ))}
           </div>

@@ -1,10 +1,9 @@
 import { useGetTasksQuery, useUpdateTaskStatusMutation } from '@/state/api'
 import React from 'react'
-import { DndProvider, useDrag, useDrop } from "react-dnd"
+import { DndProvider, DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { Task as TaskType } from "@/state/api"
-import { EllipsisVertical, MessageSquareMore, Plus } from 'lucide-react'
-import Image from 'next/image'
+import { EllipsisVertical, Plus } from 'lucide-react'
 import { format } from "date-fns";
 
 type boardProps = {
@@ -32,7 +31,7 @@ const BoardView = ({ id, setIsModelNewTaskOpen }: boardProps) => {
 			<div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4'>
 
 				{
-					taskStatus.map((status, index) => (
+					taskStatus.map((status) => (
 						<TaskColumn
 							key={status}
 							status={status}
@@ -64,18 +63,18 @@ type TaskColumnProps = {
 	const [{ isOver }, drop] = useDrop(() => ({
 	  accept: "task",
 	  drop: (item: { id: number }) => moveTask(item.id, status),
-	  collect: (monitor: any) => ({
+	  collect: (monitor: DropTargetMonitor) => ({
 		isOver: !!monitor.isOver(),
 	  }),
 	}));
   
 	const tasksCount = tasks.filter((task) => task.status === status).length;
   
-	const statusColor: any = {
+	const statusColor: { [key: string]: string } = {
 	  "To Do": "#2563EB",
 	  "Work In Progress": "#059669",
 	  "Under Review": "#D97706",
-	  Completed: "#000000",
+	  "Completed": "#000000",
 	};
   
 	return (
@@ -132,7 +131,7 @@ type TaskColumnProps = {
 	const [{ isDragging }, drag] = useDrag(() => ({
 	  type: "task",
 	  item: { id: task.id },
-	  collect: (monitor: any) => ({
+	  collect: (monitor: DragSourceMonitor) => ({
 		isDragging: !!monitor.isDragging(),
 	  }),
 	}));
@@ -146,7 +145,6 @@ type TaskColumnProps = {
 	  ? format(new Date(task.dueDate), "P")
 	  : "";
   
-	const numberOfComments = (task.comments && task.comments.length) || 0;
   
 	const PriorityTag = ({ priority }: { priority: TaskType["priority"] }) => (
 	  <div
